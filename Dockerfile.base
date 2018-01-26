@@ -1,0 +1,34 @@
+FROM ubuntu:18.04
+
+RUN apt update && \
+    apt install -y make locales ca-certificates --no-install-recommends && \
+    apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+
+RUN locale-gen ja_JP.UTF-8
+ENV TZ Asia/Tokyo
+
+ENV TINI_VERSION v0.16.1
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN mv /tini /usr/local/bin/tini && \
+    chmod +x /usr/local/bin/tini
+
+ENV SHELL=/bin/bash \
+    NB_USER=user \
+    NB_UID=1000 \
+    NB_GID=100 \
+    LANG=ja_JP.UTF-8 \
+    LANGUAGE=ja_JP.UTF-8
+
+ADD scripts/fix-permissions /usr/local/bin/fix-permissions
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    mkdir $HOME/work && \
+    fix-permissions $HOME
+USER $NB_USER
+
+ENV HOME=/home/$NB_USER
+ENV PATH=$HOME/.local/bin:$PATH
+
+WORKDIR /home/user/work
+
+ENTRYPOINT ["tini", "--", "run.sh"]
+COPY scripts/run.sh /usr/local/bin/

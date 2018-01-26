@@ -1,0 +1,25 @@
+version: "3"
+services:
+    base:
+        image: odanado/book:base
+        build:
+            context: .
+            dockerfile: Dockerfile.base
+
+    texlive:
+        image: odanado/book:texlive
+        build:
+            context: .
+            dockerfile: Dockerfile.texlive
+
+    pandoc:
+        image: odanado/book:pandoc
+        build:
+            context: .
+            dockerfile: Dockerfile.pandoc
+
+    textlint:
+        image: odanado/book:textlint
+        build:
+            context: .
+            dockerfile: Dockerfile.textlint

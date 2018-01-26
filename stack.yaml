@@ -1,0 +1,6 @@
+resolver: lts-9.14
+
+packages: []
+
+extra-deps:
+    - roman-numerals-0.5.1.5

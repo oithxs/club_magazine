@@ -1,0 +1,111 @@
+version: 2
+jobs:
+    build:
+        working_directory: ~/work
+        machine: true
+        steps:
+            - checkout
+            - restore_cache:
+                key: docker-base-{{ checksum "Dockerfile.base" }}
+                path: ~/cache/base-image.tar
+            - restore_cache:
+                key: docker-pandoc-{{ checksum "Dockerfile.pandoc" }}-{{ checksum "Dockerfile.base" }}
+                path: ~/cache/pandoc-image.tar
+            - restore_cache:
+                key: docker-texlive-{{ checksum "Dockerfile.texlive" }}-{{ checksum "Dockerfile.base" }}
+                path: ~/cache/texlive-image.tar
+            - restore_cache:
+                key: docker-texlive-{{ checksum "Dockerfile.textlint" }}-{{ checksum "Dockerfile.base" }}
+                path: ~/cache/textlint-image.tar
+
+            - run:
+                command: |
+                    if [ -f ~/cache/base-image.tar ]; then
+                        docker load -i ~/cache/base-image.tar
+                    else
+                        docker-compose build base
+                    fi
+
+            - run:
+                command: |
+                    if [ -f ~/cache/pandoc-image.tar ]; then
+                        docker load -i ~/cache/pandoc-image.tar
+                    else
+                        docker-compose build pandoc
+                    fi
+
+            - run:
+                command: |
+                    if [ -f ~/cache/texlive-image.tar ]; then
+                        docker load -i ~/cache/texlive-image.tar
+                    else
+                        docker-compose build texlive
+                    fi
+
+            - run:
+                command: |
+                    if [ -f ~/cache/textlint-image.tar ]; then
+                        docker load -i ~/cache/textlint-image.tar
+                    else
+                        docker-compose build textlint
+                    fi
+
+
+            - run:
+                name: save docker cache
+                command: |
+                    mkdir -p ~/cache
+                    docker save -o ~/cache/base-image.tar odanado/book:base 
+                    docker save -o ~/cache/pandoc-image.tar odanado/book:pandoc 
+                    docker save -o ~/cache/texlive-image.tar odanado/book:texlive 
+                    docker save -o ~/cache/textlint-image.tar odanado/book:textlint 
+                    docker images odanado/book
+
+            - save_cache:
+                key: docker-base-{{ checksum "Dockerfile.base" }}
+                paths: ~/cache/base-image.tar
+            - save_cache:
+                key: docker-pandoc-{{ checksum "Dockerfile.pandoc" }}-{{ checksum "Dockerfile.base" }}
+                paths: ~/cache/pandoc-image.tar
+            - save_cache:
+                key: docker-texlive-{{ checksum "Dockerfile.texlive" }}-{{ checksum "Dockerfile.base" }}
+                paths: ~/cache/texlive-image.tar
+            - save_cache:
+                key: docker-textlint-{{ checksum "Dockerfile.textlint" }}-{{ checksum "Dockerfile.base" }}
+                paths: ~/cache/textlint-image.tar
+            
+            - run: make docker-all
+            - store_artifacts:
+                path: ~/work/main.pdf
+            - save_cache:
+                key: build-{{ checksum "~/work/main.pdf"}}
+                paths: ~/work/build
+
+
+    
+    deploy-gh-pages:
+        working_directory: ~/work/build
+        machine: true
+        steps:
+            - restore_cache:
+                key: build
+            - run: git init .
+            - run: git config --global user.name "circle ci"
+            - run: git config --global user.email "odan3240@gmail.com"
+            - run: git checkout -b gh-pages
+            - run: git add *.html
+            - run: git commit -m 'Update [ci skip]'
+            - run: git push -f git@github.com:odanado/pandoc-sandbox.git gh-pages
+
+
+workflows:
+    version: 2
+    flow:
+        jobs:
+            - build
+            - deploy-gh-pages:
+                requires:
+                    - build
+                filters:
+                    branches:
+                        only: master

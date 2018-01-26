@@ -1,0 +1,22 @@
+{
+    "rules": {
+        "preset-ja-technical-writing": {
+            "no-exclamation-question-mark": false,
+            "sentence-length": {
+                "max" : 500
+            },
+            "ja-no-mixed-period": {
+                "periodMark": "。",
+                "allowPeriodMarks": ["．"]
+            },
+            "no-doubled-joshi": {
+                "separatorChars": ["。","?","!","？","！","．"]
+            },
+            "no-doubled-conjunctive-particle-ga": false
+        },
+        "spellcheck-tech-word": true
+    },
+    "filters": {
+        "comments": true
+    }
+}

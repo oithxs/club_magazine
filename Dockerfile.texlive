@@ -1,0 +1,9 @@
+FROM odanado/book:base
+
+USER root
+
+RUN apt update && \
+    apt install -y texlive texlive-latex-extra texlive-lang-japanese --no-install-recommends && \
+    apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+
+USER $NB_USER
