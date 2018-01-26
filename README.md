@@ -12,9 +12,8 @@ git clone git@github.com:oithxs/club_magazine.git
 ## 作業の流れ
 
 1. リポジトリをcloneする
-2. forkしたリポジトリをcloneする
-3. masterからbranchを切って作業する
-4. pushする
+2. masterからbranchを切って作業する
+3. pushする
 
 ## 執筆の流れ
 1. 適当な名前でディレクトリを作る (ここでは poyo とする)
@@ -38,7 +37,8 @@ make docker-all
 git checkout -b add-poyo
 ```
 
-2. git add & git commit する
-3. git push origin add-poyo
-4. ブラウザでリポジトリを開いてPRを作成する
-5. 自動でlint + build が実行され，circle ciのページにpdfが生成されます
+2.上に書いた執筆作業をする
+3. git add & git commit する
+4. git push origin add-poyo
+5. ブラウザでリポジトリを開いてPRを作成する
+6. 自動でlint + build が実行され，circle ciのページにpdfが生成されます
