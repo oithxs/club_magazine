@@ -38,8 +38,7 @@ make docker-all
 git checkout -b add-poyo
 ```
 
-2. 上に書いた執筆作業をする
-3. git add & git commit する
-4. git push origin add-poyo
-5. ブラウザでリポジトリを開いてPRを作成する
-6. 自動でlint + build が実行され，circle ciのページにpdfが生成されます
+2. git add & git commit する
+3. git push origin add-poyo
+4. ブラウザでリポジトリを開いてPRを作成する
+5. 自動でlint + build が実行され，circle ciのページにpdfが生成されます
