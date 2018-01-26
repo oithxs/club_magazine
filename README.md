@@ -37,7 +37,7 @@ make docker-all
 git checkout -b add-poyo
 ```
 
-2.上に書いた執筆作業をする
+2. 上に書いた執筆作業をする
 3. git add & git commit する
 4. git push origin add-poyo
 5. ブラウザでリポジトリを開いてPRを作成する
