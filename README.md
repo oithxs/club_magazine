@@ -12,9 +12,8 @@ git clone git@github.com:oithxs/club_magazine.git
 ## 作業の流れ
 
 1. リポジトリをcloneする
-2. forkしたリポジトリをcloneする
-3. masterからbranchを切って作業する
-4. pushする
+2. masterからbranchを切って作業する
+3. pushする
 
 ## 執筆の流れ
 1. 適当な名前でディレクトリを作る (ここでは poyo とする)
