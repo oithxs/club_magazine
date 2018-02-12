@@ -31,7 +31,7 @@ textlint-diff:
 	textlint --fix --dry-run --format diff $(ALL_MD_FILES)
 
 $(OUTDIR)/%.tex: %/*
-	mkdir -p $(OUTDIR)
+	mkdir -p $(OUTDIR)/articles
 	$(eval DIR_NAME=$(call GET_DIR_NAME,$^))
 
 	$(eval MD_FILES=$(sort $(wildcard $(DIR_NAME)/*.md)))
@@ -49,7 +49,7 @@ pdf: $(TEX_FILES)
 
 
 $(OUTDIR)/%.html: %/*
-	mkdir -p $(OUTDIR)
+	mkdir -p $(OUTDIR)/articles
 	$(eval DIR_NAME=$(call GET_DIR_NAME,$^))
 
 	$(eval MD_FILES=$(sort $(wildcard $(DIR_NAME)/*.md)))
@@ -70,7 +70,7 @@ docker-pull:
 
 docker-all: docker-textlint docker-tex docker-html docker-pdf
 
-docker-textlint:
+docker-textlint: $(ALL_MD_FILES)
 	$(call RUN,textlint,make textlint)
 
 docker-textlint-fix:
@@ -79,13 +79,13 @@ docker-textlint-fix:
 docker-textlint-diff:
 	$(call RUN,textlint,make textlint-diff)
 
-docker-tex:
+docker-tex: $(TEX_FILES)
 	$(call RUN,pandoc,make tex)
 
-docker-html:
+docker-html: $(TEX_FILES)
 	$(call RUN,pandoc,make html)
 
-docker-pdf:
+docker-pdf: $(TEX_FILES)
 	$(call RUN,texlive,make pdf)
 
 
