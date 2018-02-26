@@ -40,7 +40,8 @@ latexエンジンが普段使っている `pLaTeX` とは違うため， `jsbook
 Lintツールとは，ソースコードに対して静的解析を行うツールです．
 これにより，変数の初期化忘れなどのバグや，`(` 周辺の空白の挿入し忘れなどのコーディングスタイルに従っていない箇所を検出できます．
 [textlint](http://efcl.info/2014/12/30/textlint/)はMarkdownで書かれたテキスト向けのLintツールです．
-textlintはECMAScript(JavaScript)のLintツールである，ESLintの影響を強く受けているツールです．
+textlintはECMAScript(JavaScript)のLintツールです．
+ESLintの影響を強く受けているツールです．
 
 textlintはESLintと同様に，文章に関する様々なルールを使用できます．
 textlintについて何も詳しくなかったため，[江添亮氏のC++17 Book](https://github.com/EzoeRyou/cpp17book)のものをベースに設定ファイルを書きました．
@@ -72,48 +73,49 @@ textlintについて何も詳しくなかったため，[江添亮氏のC++17 Bo
 ```
 
 # Dockerの設定
-Dockerはコンテナ型の仮想化を行うオープンソフトウェアである．
-`Dockerfile` という設定ファイルを使えば，異なる端末でほぼ同一の開発環境を用意できる．
+Dockerはコンテナ型の仮想化を行うオープンソフトウェアです．
+`Dockerfile` という設定ファイルを使えば，異なる端末でほぼ同一の開発環境を用意できます．
 
 ## 執筆環境構築の難しさ
-部誌の執筆環境には大きく分けて，`textlint`,`pandoc`,`latex`の3つの開発環境を用意する必要がある．
-このうち，latexの開発環境にはtexliveというパッケージをインストールする必要があるが，ローカルに導入する難易度が高く，導入できたとしても環境が壊れやすいという特性がある．
-またpandocは，引用の表示のために`pandoc-citeproc`，図表番号の相互参照のために`pandoc-crossref`というfilterを導入する必要があった．pandoc及びこれらのfilterは，Haskell製のソフトウェアであるが，Haskellのパッケージ間の依存関係の闇は深く，Stackと呼ばれるパッケージマネージャを用いても，環境構築が難しいものであった．
+部誌の執筆環境には大きく分けて，`textlint`,`pandoc`,`latex`の3つの開発環境を用意する必要があります．
+このうち，latexの開発環境にはtexliveというパッケージをインストールする必要がありますが，ローカルに導入する難易度が高く，導入できたとしても環境が壊れやすいという特性があります．
+またpandocは，引用の表示のために`pandoc-citeproc`，図表番号の相互参照のために`pandoc-crossref`というfilterを導入する必要がありました．
+pandoc及びこれらのfilterは，Haskell製のソフトウェアですが，Haskellのパッケージ間の依存関係の闇は深く，Stackと呼ばれるパッケージマネージャを用いても，環境構築が難しいものでした．
 
-上述したとおり，執筆環境を部員それぞれのローカルに構築して貰うのは，非常に難しいと判断したため，Dockerコンテナ上に環境を構築することにした．
-これにより，Dockerさえインストールすれば，各自のPCで部誌を生成することが可能になる．
+上述したとおり，執筆環境を部員それぞれのローカルに構築して貰うのは，非常に難しいと判断したため，Dockerコンテナ上に環境を構築することにしました．
+これにより，Dockerさえインストールすれば，各自のPCで部誌を生成することが可能になります．
 
 ## Dockerのuidとgidのマッピング問題
-Dockerコンテナ内で部誌pdfを生成することになったが，これによりDockerのuidとgidのマッピング問題が生じた．
-これは，Dockerコンテナ内のuid,gidがホストマシンのuid,gidと異なるために，パーミッションの設定によっては，コンテナで生成されたファイルをホストマシンで自由に扱えないという問題である．
-[jupyter/docker-stacks](https://github.com/jupyter/docker-stacks)では，コンテナ起動時にホストマシンのuidとgidを指定することで，コンテナ内のユーザのuidとgidをそれに設定するシェルスクリプトを書き，それをDockerのENTRYPOINTに指定している．
-この仕組みを真似することで，マッピング問題を回避することにした．
+Dockerコンテナ内で部誌pdfを生成することになりましたが，これによりDockerのuidとgidのマッピング問題が生じます．
+これは，Dockerコンテナ内のuid,gidがホストマシンのuid,gidと異なるために，パーミッションの設定によっては，コンテナで生成されたファイルをホストマシンで自由に扱えないという問題です．
+[jupyter/docker-stacks](https://github.com/jupyter/docker-stacks)では，コンテナ起動時にホストマシンのuidとgidを指定することで，コンテナ内のユーザのuidとgidをそれに設定するシェルスクリプトを書き，それをDockerのENTRYPOINTに指定しています．
+この仕組みを真似することで，マッピング問題を回避することにしました．
 
 # Circle CIの設定
-Circle CIとは，継続的インテグレーション(Continuous Integration;CI)のSaaSである．
-このサービスをGitHubと連携することで，コミットのたびに様々な処理を走らせることができる．
-CIのSaaSで有名なものにTravis CIがあるが，Circle CIはDockerのサポートが手厚いため，こちらのサービスを使用することに決めた．
+Circle CIとは，継続的インテグレーション(Continuous Integration;CI)のSaaSです．
+このサービスをGitHubと連携することで，コミットのたびに様々な処理を走らせることができます．
+CIのSaaSで有名なものにTravis CIがありますが，Circle CIはDockerのサポートが手厚いため，こちらのサービスを使用することに決めました．
 
 ## 部誌pdf生成の自動化
-Circle CIの設定を行うことでコミットのたびに次の処理が走るようになった．
+Circle CIの設定を行うことでコミットのたびに次の処理が走るようになりました．
 
 1. textlintを用いた文章の自動校正
 2. pandocを用いてMarkdownで書かれた文章をtexファイルに変換
 3. texファイルからpLaTeXを用いてpdf生成
 
-また，`.circleci/config.yml`に `store_artifacts` の設定を書くことで，生成されたpdfをCircle CIのページから確認できるようにした．
+また，`.circleci/config.yml`に `store_artifacts` の設定を書くことで，生成されたpdfをCircle CIのページから確認できるようにしました．
 ```yaml
 - store_artifacts:
     path: ~/work/main.pdf
 ```
 
 ## Dockerイメージのキャッシュ
-Circle CI上での部誌生成もDockerコンテナ内で実行される．
-この時，何も設定をしないとコミットのたびに，Dockerfileを変更していないにも関わらず，毎回コンテナのbuildが走ることになる．
-これは時間の無駄である．
-特にpandocコンテナのbuildには30分ほど時間がかかる．
-そこで，Circle CIのcache機能を用いて，Dockerイメージをキャッシュするようにした．
-次のような設定を書けばDockerイメージのキャッシュが可能になる．
+Circle CI上での部誌生成もDockerコンテナ内で実行されます．
+この時，何も設定をしないとコミットのたびに，Dockerfileを変更していないにも関わらず，毎回コンテナのbuildが走ることになります．
+これは時間の無駄です．
+特にpandocコンテナのbuildには30分ほど時間がかかります．
+そこで，Circle CIのcache機能を用いて，Dockerイメージをキャッシュするようにしました．
+次のような設定を書けばDockerイメージのキャッシュが可能になります．
 
 ```yaml
 - restore_cache:
@@ -132,10 +134,10 @@ Circle CI上での部誌生成もDockerコンテナ内で実行される．
     paths: ~/cache/base-image.tar
 ```
 
-次の3つのことを順番に行っている．
+次の3つのことを順番に行っています．
 
 1. `restore_cache`: Dockerfileのハッシュ値をkeyにDockerイメージのファイルのキャッシュを読み込む
 2. 真ん中の`run`: キャッシュファイルが存在するならそれを読み込み，しないならDocker buildを実行
 3. `save_cache`: Dockerfileのハッシュ値をkeyにDockerイメージのファイルのキャッシュを作成
 
-Dockerfileのハッシュ値をkeyの一部に含めることで，Dockerfileの変更を検知できる．
+Dockerfileのハッシュ値をkeyの一部に含めることで，Dockerfileの変更を検知できます．
