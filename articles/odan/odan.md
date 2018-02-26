@@ -88,3 +88,54 @@ Dockerコンテナ内で部誌pdfを生成することになったが，これ�
 これは，Dockerコンテナ内のuid,gidがホストマシンのuid,gidと異なるために，パーミッションの設定によっては，コンテナで生成されたファイルをホストマシンで自由に扱えないという問題である．
 [jupyter/docker-stacks](https://github.com/jupyter/docker-stacks)では，コンテナ起動時にホストマシンのuidとgidを指定することで，コンテナ内のユーザのuidとgidをそれに設定するシェルスクリプトを書き，それをDockerのENTRYPOINTに指定している．
 この仕組みを真似することで，マッピング問題を回避することにした．
+
+# Circle CIの設定
+Circle CIとは，継続的インテグレーション(Continuous Integration;CI)のSaaSである．
+このサービスをGitHubと連携することで，コミットのたびに様々な処理を走らせることができる．
+CIのSaaSで有名なものにTravis CIがあるが，Circle CIはDockerのサポートが手厚いため，こちらのサービスを使用することに決めた．
+
+## 部誌pdf生成の自動化
+Circle CIの設定を行うことでコミットのたびに次の処理が走るようになった．
+
+1. textlintを用いた文章の自動校正
+2. pandocを用いてMarkdownで書かれた文章をtexファイルに変換
+3. texファイルからpLaTeXを用いてpdf生成
+
+また，`.circleci/config.yml`に `store_artifacts` の設定を書くことで，生成されたpdfをCircle CIのページから確認できるようにした．
+```yaml
+- store_artifacts:
+    path: ~/work/main.pdf
+```
+
+## Dockerイメージのキャッシュ
+Circle CI上での部誌生成もDockerコンテナ内で実行される．
+この時，何も設定をしないとコミットのたびに，Dockerfileを変更していないにも関わらず，毎回コンテナのbuildが走ることになる．
+これは時間の無駄である．
+特にpandocコンテナのbuildには30分ほど時間がかかる．
+そこで，Circle CIのcache機能を用いて，Dockerイメージをキャッシュするようにした．
+次のような設定を書けばDockerイメージのキャッシュが可能になる．
+
+```yaml
+- restore_cache:
+    key: docker-base-{{ checksum "Dockerfile.base" }}
+    path: ~/cache/base-image.tar
+- run:
+    command: |
+        if [ -f ~/cache/base-image.tar ]; then
+            docker load -i ~/cache/base-image.tar
+        else
+            docker-compose build base
+        fi
+
+- save_cache:
+    key: docker-base-{{ checksum "Dockerfile.base" }}
+    paths: ~/cache/base-image.tar
+```
+
+次の3つのことを順番に行っている．
+
+1. `restore_cache`: Dockerfileのハッシュ値をkeyにDockerイメージのファイルのキャッシュを読み込む
+2. 真ん中の`run`: キャッシュファイルが存在するならそれを読み込み，しないならDocker buildを実行
+3. `save_cache`: Dockerfileのハッシュ値をkeyにDockerイメージのファイルのキャッシュを作成
+
+Dockerfileのハッシュ値をkeyの一部に含めることで，Dockerfileの変更を検知できる．
