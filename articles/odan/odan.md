@@ -35,3 +35,38 @@ latexエンジンが普段使っている `pLaTeX` とは違うため， `jsbook
 最終的にこの方針に決定しました．
 この方針ではmarkdownで書くため，textlintを使うことで文章の自動校正が可能になります．
 また，一度texファイルにするこで，レイアウトの調整などはlatexのレイヤーで行うことができます．これにより柔軟な調整が可能になります．
+
+# textlintの設定
+Lintツールとは，ソースコードに対して静的解析を行うツールです．
+これにより，変数の初期化忘れなどのバグや，`(` 周辺の空白の挿入し忘れなどのコーディングスタイルに従っていない箇所を検出できます．
+[textlint](http://efcl.info/2014/12/30/textlint/)はMarkdownで書かれたテキスト向けのLintツールです．
+textlintはECMAScript(JavaScript)のLintツールである，ESLintの影響を強く受けているツールです．
+
+textlintはESLintと同様に，文章に関する様々なルールを使用できます．
+textlintについて何も詳しくなかったため，[江添亮氏のC++17 Book](https://github.com/EzoeRyou/cpp17book)のものをベースに設定ファイルを書きました．
+以下が設定の全体です．
+
+```json
+{
+    "rules": {
+        "preset-ja-technical-writing": {
+            "no-exclamation-question-mark": false,
+            "sentence-length": {
+                "max" : 500
+            },
+            "ja-no-mixed-period": {
+                "periodMark": "。",
+                "allowPeriodMarks": ["．"]
+            },
+            "no-doubled-joshi": {
+                "separatorChars": ["。","?","!","？","！","．"]
+            },
+            "no-doubled-conjunctive-particle-ga": false
+        },
+        "spellcheck-tech-word": true
+    },
+    "filters": {
+        "comments": true
+    }
+}
+```
