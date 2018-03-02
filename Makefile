@@ -1,5 +1,5 @@
 # ここにpdf化したいmarkdownが含まれるディレクトリを指定してください
-MD_DIRS:=
+MD_DIRS:=articles/yukari
 
 # 以下触らないこと
 OUTDIR:=build
