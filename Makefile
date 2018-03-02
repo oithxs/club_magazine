@@ -1,5 +1,5 @@
 # ここにpdf化したいmarkdownが含まれるディレクトリを指定してください
-MD_DIRS:=articles/chocobo/
+MD_DIRS:=articles/chocobo
 
 # 以下触らないこと
 OUTDIR:=build
