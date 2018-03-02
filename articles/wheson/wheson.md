@@ -25,12 +25,12 @@ YouTubeを見ている人は多いと思います．しかし海外のYouTuber�
 なりましたね．では以下オススメの動画を記述しますので各位鑑賞するように．
 
 # オススメ動画一覧
-[Staying at a Tokyo Capsule Hotel](/articles/wheson/images/youtube_image1.png)
+[Staying at a Tokyo Capsule Hotel](articles/wheson/images/youtube_image1.png)
 Title: Staying at a Tokyo Capsule Hotel
 Channel: Abroad in Japan
 - わさびキットカットとカルピスで苦しむおじさん
 
-[KizunaAI](/articles/wheson/images/youtube_image2.png)
+[KizunaAI](articles/wheson/images/youtube_image2.png)
 Title:【BIOHAZARD 7 resident evil】#01 ゾンビが出てないのに怖い・・・恐怖のバイオハザード7実況
 Channel: A.I.Games
 - かわいい(かわいい)
