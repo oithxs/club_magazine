@@ -7,7 +7,7 @@ Windowsだし、大体ネットに転がってる話。
   
 ## 使用したもの
 - ThinkPad E470
-  - i5-7200U  
+  - i5-7200U
   - GeForce 940MX
   - RAM 8GB,HDD 500GB
   - Windows10Home(部活パワーでProに)
