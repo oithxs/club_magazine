@@ -15,7 +15,7 @@ jobs:
                 key: docker-texlive-{{ checksum "Dockerfile.texlive" }}-{{ checksum "Dockerfile.base" }}
                 path: ~/cache/texlive-image.tar
             - restore_cache:
-                key: docker-texlive-{{ checksum "Dockerfile.textlint" }}-{{ checksum "Dockerfile.base" }}
+                key: docker-texlint-{{ checksum "Dockerfile.textlint" }}-{{ checksum "Dockerfile.base" }}
                 path: ~/cache/textlint-image.tar
 
             - run:
