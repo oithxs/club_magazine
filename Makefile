@@ -39,7 +39,7 @@ $(OUTDIR)/%.tex: %/*
 	$(eval BIB_FILE=$(DIR_NAME)/$(DIR_NAME).bib)
 	$(eval CITE_OPTION=$(shell if [ -f $(BIB_FILE) ]; then echo --bibliography=$(BIB_FILE); else echo ; fi))
 
-	pandoc $(MD_FILES) $(CITE_OPTION) --filter pandoc-crossref -M "crossrefYaml=crossref-config.yaml" -o $@
+	pandoc -t markdown $(MD_FILES) $(CITE_OPTION) --filter pandoc-crossref -M "crossrefYaml=crossref-config.yaml" -o $@
 
 tex: $(TEX_FILES)
 
