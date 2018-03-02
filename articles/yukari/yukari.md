@@ -5,15 +5,15 @@ Windowsだし、大体ネットに転がってる話。
   
 ## 使用したもの
 - ThinkPad E470
-    - i5-7200U
-    - GeForce 940MX
-    - RAM 8GB,HDD 500GB
-    - Windows10Home(部活パワーでProに)
-    - 14inch
+  + i5-7200U
+  + GeForce 940MX
+  + RAM 8GB,HDD 500GB
+  + Windows10Home(部活パワーでProに)
+  + 14inch
 - SSD
-    - crucialのMX300 CT525MX300SSD1/JP
-    - 容量　525GB
-    - 2017年の年末に１万５千円台と安かった
+  + crucialのMX300 CT525MX300SSD1/JP
+  + 容量　525GB
+  + 2017年の年末に１万５千円台と安かった
 - 内臓HDDを外付けにできるやつ
 
 ## やってみた  
