@@ -31,6 +31,6 @@ whesonです．
 - 感想: わさびキットカットとカルピスで苦しむおじさん
 
 [KizunaAI](articles/wheson/images/youtube_image2.png)
-- Title:【BIOHAZARD 7 resident evil】#01 ゾンビが出てないのに怖い・・・恐怖のバイオハザード7実況
+- Title:【BIOHAZARD 7 resident evil】#01 ゾンビが出てないのに怖い…恐怖のバイオハザード7実況
 - Channel: A.I.Games
 - 感想: かわいい(かわいい)
