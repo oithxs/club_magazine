@@ -70,7 +70,7 @@ docker-pull:
 
 docker-all: docker-textlint docker-tex docker-html docker-pdf
 
-docker-textlint: $(ALL_MD_FILES)
+docker-textlint:
 	$(call RUN,textlint,make textlint)
 
 docker-textlint-fix:
@@ -79,13 +79,13 @@ docker-textlint-fix:
 docker-textlint-diff:
 	$(call RUN,textlint,make textlint-diff)
 
-docker-tex: $(TEX_FILES)
+docker-tex:
 	$(call RUN,pandoc,make tex)
 
-docker-html: $(TEX_FILES)
+docker-html:
 	$(call RUN,pandoc,make html)
 
-docker-pdf: $(TEX_FILES)
+docker-pdf:
 	$(call RUN,texlive,make pdf)
 
 
