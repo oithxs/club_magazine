@@ -2,35 +2,46 @@
 whesonです．
 
 本記事を見ている人でYouTubeを見ている人は多いでしょう．しかし海外のYouTuberの動画を見ている人はあまりいないですよね(主観)．
+
 そこで海外のYouTuberを少し嗜んでいるwhesonが楽しみ方を伝授いたします．
 
 注意ですが，*ここでいう海外の人とは英語圏の方のことを指します．
 
 ## その1 自分のよく知る分野を取り上げている動画を選ぶ
 はい．当然ですが全く知らない分野の動画を見ても楽しくないですね．時間の無駄とは言い切れませんが楽しくないのでやめましょう．
+
 例えば，やったことあるゲームの実況でしたら，海外の人がなぜそのような反応をしたのかが分かるので楽しめます．
 
 私のオススメは，日本旅行をしている動画です．日本のどんなことに関心があって，どのようなことでリアクションを取るのかが見られてとても楽しめます．
 
 ## その2 英語が無理すぎるという場合は日本語訳がついているものを選ぶ
 最近の動画では字幕を付けられるので，有志が日本語訳をしているものがあります．もし英語がさっぱりすぎてダメという場合でも，日本語訳をつけることで緩和されるでしょう．
+
 私自身は英語字幕を付けて，雰囲気を楽しんでます．全て理解しているわけではありませんが，英語は英語で理解するのが良いと考えているので頑張って英語字幕で理解しようとしてます．
 
 ## その3 VirtualYouTuberを英語字幕で鑑賞する
 「海外Youtuberじゃないじゃん! 」って思われた方，その通りです．私は普段英語字幕でVtuberを鑑賞しています．その理由は海外の人が日本の動画を見ているときの気持ちを味わうためです．
+
 それだけです．
 
 # 気になってきましたか？
 どうですか．海外Youtuber及び英語の存在する動画を見たくなってきませんか？
-なりましたね．では以下オススメの動画を記述しますので各位鑑賞するように．
+なりましたね．
+
+では以下オススメの動画を記述しますので各位鑑賞するように．
 
 # オススメ動画一覧
-[Staying at a Tokyo Capsule Hotel](articles/wheson/images/youtube_image1.png)
+![Staying at a Tokyo Capsule Hotel](articles/wheson/images/youtube_image1.png)
 - Title: Staying at a Tokyo Capsule Hotel
+
 - Channel: Abroad in Japan
+
 - 感想: わさびキットカットとカルピスで苦しむおじさん
 
-[KizunaAI](articles/wheson/images/youtube_image2.png)
-- Title:【BIOHAZARD 7 resident evil】#01 ゾンビが出てないのに怖い…恐怖のバイオハザード7実況
+![KizunaAI](articles/wheson/images/youtube_image2.png)
+<!-- textlint-disable -->
+- Title:【BIOHAZARD 7 resident evil】#01 ゾンビが出てないのに怖い・・・恐怖のバイオハザード7実況
+<!-- textlint-enable -->
 - Channel: A.I.Games
+
 - 感想: かわいい(かわいい)
