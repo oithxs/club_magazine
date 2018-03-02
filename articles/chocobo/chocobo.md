@@ -37,6 +37,7 @@ AI自体はまだまだ発展途上といった感じで、来年のコンテス
 オセロAI(odan's diary)
 Visual C++ を使ってオセロを作ってみよう
 ゲーム計算メカニズム (コンピュータ数学シリーズ 7)
+
 ## オセロプログラム
 https://github.com/chocobo777/othello
 
