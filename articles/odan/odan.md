@@ -6,7 +6,7 @@
 
 # TL;DR
 - 大学の部活で部誌を作りたいという声が挙がったので執筆環境を構築した
-- markdownで書いてpandocでtexファイルを生成，latexでpdf化した
+- Markdownで書いてpandocでtexファイルを生成，latexでpdf化した
 - texlintで文章を自動校正する仕組みを導入した
 - 開発環境はDocker上に構築した
 - Circle CIと連携することでコミットのたびに部誌pdfが生成されるようにした
@@ -17,9 +17,9 @@ pandocの説明は[公式サイト](http://sky-y.github.io/site-pandoc-jp/users-
 
 > Pandocは Haskell で書かれたライブラリおよびコマンドラインツールであり、 あるマークアップ形式で書かれた文書を別の形式へ変換するものです。
 
-例えば，pandocを使うことで，markdownで書かれた文章をdocx形式に変換できます．
+例えば，pandocを使うことで，Markdownで書かれた文章をdocx形式に変換できます．
 
-部誌を執筆するにはいくつかの方法がありますが最終的には，markdownで記事を書き，pandocでtexファイルに変換し，最終的にlatexでpdfを生成する方針に決定しました．
+部誌を執筆するにはいくつかの方法がありますが最終的には，Markdownで記事を書き，pandocでtexファイルに変換し，最終的にlatexでpdfを生成する方針に決定しました．
 まず，他に検討した方針の採用に至らなかった理由を書いていきます．
 次に採用した方針のメリットについて紹介します．
 
@@ -31,15 +31,15 @@ pandocの説明は[公式サイト](http://sky-y.github.io/site-pandoc-jp/users-
 1. latexの環境構築および習得の難しさ
 2. 後述するtextlintという自動校正ツールのサポートを受けられない
 
-## markdownで書き，pandocで直接pdfを生成
+## Markdownで書き，pandocで直接pdfを生成
 pandocというツールを知っていたため，次に思いついた方針がこれでした．
 pandocでpdfを生成する時は，内部で一度texファイルに変換された後， `xelatex` か `lualatex` によってpdf化されます．
 latexエンジンが普段使っている `pLaTeX` とは違うため， `jsbook` などのドキュメントクラスを使えず，設定方法も独特なものでした．
 これではエラーに出会った時，解決できない可能性があり，この方針は見送りました．
 
-## markdownで書き，pandocでtexファイルを生成し，pLaTeXでpdf化
+## Markdownで書き，pandocでtexファイルを生成し，pLaTeXでpdf化
 最終的にこの方針に決定しました．
-この方針ではmarkdownで書くため，textlintを使うことで文章の自動校正が可能になります．
+この方針ではMarkdownで書くため，textlintを使うことで文章の自動校正が可能になります．
 また，一度texファイルにすることで，レイアウトの調整などはlatexのレイヤーで行うことができます．これにより柔軟な調整が可能になります．
 
 # textlintの設定
