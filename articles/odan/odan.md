@@ -34,7 +34,7 @@ Pandocの説明は[公式サイト](http://sky-y.github.io/site-pandoc-jp/users-
 ## Markdownで書き，Pandocで直接pdfを生成
 Pandocというツールを知っていたため，次に思いついた方針がこれでした．
 Pandocでpdfを生成する時は，内部で一度texファイルに変換された後， `xelatex` か `lualatex` によってpdf化されます．
-latexエンジンが普段使っている `pLaTeX` とは違うため， `jsbook` などのドキュメントクラスを使えず，設定方法も独特なものでした．
+latexエンジンは僕が普段使っている `pLaTeX` とは違うため， `jsbook` などのドキュメントクラスを使えず，設定方法も独特なものでした．
 これではエラーに出会った時，解決できない可能性があり，この方針は見送りました．
 
 ## Markdownで書き，Pandocでtexファイルを生成し，pLaTeXでpdf化
@@ -44,14 +44,12 @@ latexエンジンが普段使っている `pLaTeX` とは違うため， `jsbook
 
 # textlintの設定
 Lintツールとは，ソースコードに対して静的解析を行うツールです．
-これにより，変数の初期化忘れなどのバグや，`(` 周辺の空白の挿入し忘れなどのコーディングスタイルに従っていない箇所を検出できます．
+これにより，変数の初期化忘れなどのバグや， カッコ周辺の空白の挿入し忘れなどのコーディングスタイルに従っていない箇所を検出できます．
 [textlint](http://efcl.info/2014/12/30/textlint/)はMarkdownで書かれたテキスト向けのLintツールです．
-textlintはECMAScript(JavaScript)のLintツールです．
-ESLintの影響を強く受けているツールです．
-
-textlintはESLintと同様に，文章に関する様々なルールを使用できます．
+textlintはECMAScript(JavaScript)のLintツールであるESLintの影響を強く受けており， textlintはESLintと同様に，文章に関する様々なルールを使用できます．
 textlintについて何も詳しくなかったため，[江添亮氏のC++17 Book](https://github.com/EzoeRyou/cpp17book)のものをベースに設定ファイルを書きました．
 以下が設定の全体です．
+技術的な文章を書くのに必要な最低限のルールが揃っています．
 
 ```json
 {
@@ -80,7 +78,7 @@ textlintについて何も詳しくなかったため，[江添亮氏のC++17 Bo
 
 # Dockerの設定
 Dockerはコンテナ型の仮想化を行うオープンソフトウェアです．
-`Dockerfile` という設定ファイルを使えば，異なる端末でほぼ同一の開発環境を用意できます．
+`Dockerfile` という設定ファイルを使うことで，異なる端末でほぼ同一の開発環境を用意できます．
 
 ## 執筆環境構築の難しさ
 部誌の執筆環境には大きく分けて，`textlint`,`pandoc`,`latex`の3つの開発環境を用意する必要があります．
@@ -147,3 +145,4 @@ Circle CI上での部誌生成もDockerコンテナ内で実行されます．
 3. `save_cache`: Dockerfileのハッシュ値をkeyにDockerイメージのファイルのキャッシュを作成
 
 Dockerfileのハッシュ値をkeyの一部に含めることで，Dockerfileの変更を検知できます．
+
