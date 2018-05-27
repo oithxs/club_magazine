@@ -46,7 +46,7 @@ latexエンジンは僕が普段使っている `pLaTeX` とは違うため， `
 Lintツールとは，ソースコードに対して静的解析を行うツールです．
 これにより，変数の初期化忘れなどのバグや， カッコ周辺の空白の挿入し忘れなどのコーディングスタイルに従っていない箇所を検出できます．
 [textlint](http://efcl.info/2014/12/30/textlint/)はMarkdownで書かれたテキスト向けのLintツールです．
-textlintはECMAScript(JavaScript)のLintツールであるESLintの影響を強く受けており， textlintはESLintと同様に，文章に関する様々なルールを使用できます．
+textlintはECMAScript(JavaScript)のLintツールのESLintの影響を強く受けており， textlintはESLintと同様に，文章に関する様々なルールを使用できます．
 textlintについて何も詳しくなかったため，[江添亮氏のC++17 Book](https://github.com/EzoeRyou/cpp17book)のものをベースに設定ファイルを書きました．
 以下が設定の全体です．
 技術的な文章を書くのに必要な最低限のルールが揃っています．
