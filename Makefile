@@ -1,6 +1,6 @@
 # ここにpdf化したいmarkdownが含まれるディレクトリを指定してください
 
-MD_DIRS:=articles/odan articles/adhd articles/xztaityozx articles/mkan0141 articles/yukari articles/wheson
+MD_DIRS:=articles/odan articles/adhd articles/xztaityozx articles/mkan0141 articles/yukari articles/wheson articles/chocobo
 
 # 以下触らないこと
 OUTDIR:=build
