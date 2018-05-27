@@ -95,7 +95,7 @@ jobs:
             - run: git checkout -b gh-pages
             - run: git add -f articles/*.html
             - run: git commit -m 'Update [ci skip]'
-            - run: git push -f git@github.com:odanado/pandoc-sandbox.git gh-pages
+            - run: git push -f git@github.com:oithxs/club_magazine.git gh-pages
 
 
 workflows:
