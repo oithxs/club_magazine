@@ -93,7 +93,7 @@ jobs:
             - run: git config --global user.name "circle ci"
             - run: git config --global user.email "odan3240@gmail.com"
             - run: git checkout -b gh-pages
-            - run: git add -f work/build/articles/*.html
+            - run: git add -f articles/*.html
             - run: git commit -m 'Update [ci skip]'
             - run: git push -f git@github.com:odanado/pandoc-sandbox.git gh-pages
 
