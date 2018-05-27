@@ -104,15 +104,13 @@
 
 <img 
     src="static/img/C_ramen.jpg"
-    width=30vw
-    height=30vh
+    width=300
     title="ラーメン"
 >
 
 <img 
     src="static/img/C_don.jpg"
-    width=30vw
-    height=30vh
+    width=300
     title="丼"
 >
 
