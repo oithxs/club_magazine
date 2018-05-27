@@ -19,7 +19,7 @@ git clone git@github.com:oithxs/club_magazine.git
 1. 適当な名前でディレクトリを作る (ここでは poyo とする)
 2. articles/poyo 以下に poyo.md という名前のmarkdownファイルを作る
 3. Makefile の MD_DIRS に articles/poyo を追加する
-4. main.tex に \input{build/poyo} を追加する
+4. main.tex に \input{build/articles/poyo} を追加する
 5. inputの1行上に \chapter{タイトル名} を追加する
 
 ## pdfファイルの生成の仕方
