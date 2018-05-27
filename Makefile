@@ -31,7 +31,7 @@ textlint-diff:
 	textlint --fix --dry-run --format diff $(ALL_MD_FILES)
 
 $(OUTDIR)/%.tex: %/*
-	mkdir -p $(OUTDIR)
+	mkdir -p $(OUTDIR)/articles
 	$(eval DIR_NAME=$(call GET_DIR_NAME,$^))
 
 	$(eval MD_FILES=$(sort $(wildcard $(DIR_NAME)/*.md)))
@@ -49,7 +49,7 @@ pdf: $(TEX_FILES)
 
 
 $(OUTDIR)/%.html: %/*
-	mkdir -p $(OUTDIR)
+	mkdir -p $(OUTDIR)/articles
 	$(eval DIR_NAME=$(call GET_DIR_NAME,$^))
 
 	$(eval MD_FILES=$(sort $(wildcard $(DIR_NAME)/*.md)))
