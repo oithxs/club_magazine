@@ -32,7 +32,9 @@ whesonです．
 
 # オススメ動画一覧
 
+<!-- textlint-disable -->
 ![Staying at a Tokyo Capsule Hotel](articles/wheson/images/youtube_image1.png){ width=70% }
+<!-- textlint-enable -->
 
 - Title: Staying at a Tokyo Capsule Hotel
 
@@ -40,7 +42,9 @@ whesonです．
 
 - 感想: わさびキットカットとカルピスで苦しむおじさん
 
+<!-- textlint-disable -->
 ![KizunaAI](articles/wheson/images/youtube_image2.png){ width=70% }
+<!-- textlint-enable -->
 
 <!-- textlint-disable -->
 - Title:【BIOHAZARD 7 resident evil】#01 ゾンビが出てないのに怖い・・・恐怖のバイオハザード7実況
