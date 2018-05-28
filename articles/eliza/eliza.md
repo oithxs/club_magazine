@@ -132,6 +132,6 @@
 
 ああ、せめて手を握るぐらいしても良かったかもしれません。
 
-![セルフィー](static/img/C_selfy.jpg)
-![鹿](static/img/C_sika.jpg)
+![セルフィー](static/img/C_selfy.jpg){ width=30% }
+![鹿](static/img/C_sika.jpg){ width=30% }
 
