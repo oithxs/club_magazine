@@ -31,14 +31,21 @@ whesonです．
 では以下オススメの動画を記述しますので各位鑑賞するように．
 
 # オススメ動画一覧
-![Staying at a Tokyo Capsule Hotel](articles/wheson/images/youtube_image1.png)
+
+<!-- textlint-disable -->
+![Staying at a Tokyo Capsule Hotel](articles/wheson/images/youtube_image1.png){ width=70% }
+<!-- textlint-enable -->
+
 - Title: Staying at a Tokyo Capsule Hotel
 
 - Channel: Abroad in Japan
 
 - 感想: わさびキットカットとカルピスで苦しむおじさん
 
-![KizunaAI](articles/wheson/images/youtube_image2.png)
+<!-- textlint-disable -->
+![KizunaAI](articles/wheson/images/youtube_image2.png){ width=70% }
+<!-- textlint-enable -->
+
 <!-- textlint-disable -->
 - Title:【BIOHAZARD 7 resident evil】#01 ゾンビが出てないのに怖い・・・恐怖のバイオハザード7実況
 <!-- textlint-enable -->
