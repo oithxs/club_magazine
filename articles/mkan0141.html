@@ -1,0 +1,45 @@
+<h1 id="twitter-apiを叩いてファボ爆自動化装置を作ろう">Twitter APIを叩いてファボ爆自動化装置を作ろう!!</h1>
+<h2 id="注意">注意</h2>
+<p>この記事はあくまでTwitterAPIを叩く練習のために作られたもので、OAuth認証や難しい話はしません。また、ファボ爆の試し打ちは仲のいい人に頼むか、著者(<span class="citation">[@mkan_0141]</span>)に打ち込むかにしましょう。私は歓迎です。</p>
+<h2 id="主な流れ">主な流れ</h2>
+<p>まずはファボ爆対象者のツイート一覧を取得し、ツイートIDを取得します。ツイートIDとは、各ツイートに1つだけ与えられるIDのことです。そして、ツイートIDで指定したツイートをファボするだけです。いたって簡単。では早速次からプログラムを書いていきます。</p>
+<h2 id="必要なライブラリのインストール">必要なライブラリのインストール</h2>
+<p>使用する言語はPython3です。今回はTwitter APIを叩くために Mike Verdone さんが作ったTwitterライブラリを使います。インストールの仕方は以下の通りです。</p>
+<pre><code>pip3 install twitter</code></pre>
+<p>次にTwitter apiを叩くためにAccess Token、Access Token Seacret、 Consumer key、Consumer key seacret を取得します。これはネットに参考となるページが多いのでここでの説明は省きます。こちらのサイトが参考になります(https://syncer.jp/Web/API/Twitter/REST_API)。</p>
+<h2 id="ツイートidを取得する">ツイートIDを取得する</h2>
+<p>まずは、以下のソースコードを書いてください。</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> twitter <span class="im">import</span> <span class="op">*</span>
+
+ACCESS_TOKEN <span class="op">=</span> <span class="st">&#39;YOUR ACCESS TOKEN&#39;</span>
+ACCESS_TOKEN_SECRET <span class="op">=</span> <span class="st">&#39;YOUR ACCESS TOKEN SECRET&#39;</span>
+CONSUMER_KEY <span class="op">=</span> <span class="st">&#39;YOUR CONSUMER KEY&#39;</span>
+CONSUMER_KEY_SECRET <span class="op">=</span> <span class="st">&#39;YOUR CONSUMER KEY SECRET&#39;</span></code></pre></div>
+<p>1行目はライブラリを読み込んでいます。C言語で言うところの #include です。2行目以降はただの変数です。Pythonでは変数に型(intとかdouble)を宣言する必要がなく代入された値によって変数の型が決まります。この'YOUR ~'の部分に自分でとってきたAccess Token等を代入してください。次に、ファボ爆対象者のツイートを取得します。</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">twitter <span class="op">=</span> Twitter(auth<span class="op">=</span>OAuth(ACCESS_TOKEN,ACCESS_TOKEN_SECRET,
+                             CONSUMER_KEY,CONSUMER_KEY_SECRET))
+timelines <span class="op">=</span> twitter.statuses.user_timeline(screen_name <span class="op">=</span> userID,count <span class="op">=</span> <span class="dv">200</span>)</code></pre></div>
+<p>1,2行目は、TwitterライブラリにあるTwitterクラスを生成しています。3行目は、userIDで指定したアカウントのツイートを200件をjson形式で取得し、それをtimelines変数に代入しています。例を以下に挙げます。</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">timelines <span class="op">=</span> twitter.statuses.user_timeline(screen_name <span class="op">=</span> <span class="st">&#39;mkan_0141&#39;</span>,count <span class="op">=</span> <span class="dv">150</span>)</code></pre></div>
+<p>これは、userIDが'mkan_0141'(著者)のツイートを150件取得することになります。countに代入できる数字には制限があり、最大200です。そしてtimelines[0]['id']でツイートIDが取得できます。timelines[0]['id']は0番目のツイートのツイートIDを表しており、0を1,2,3...と変えていけば1,2,3番目のツイートIDが取得できます。</p>
+<h2 id="ファボする">ファボする</h2>
+<p>ファボするのは簡単です。</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">twitter.favorites.create(_id <span class="op">=</span> tweet[<span class="dv">0</span>][<span class="st">&#39;id&#39;</span>])</code></pre></div>
+<p>これで指定したツイートIDのツイートをファボしています。ここで、先ほど取得したツイートIDを全てファボするコードは以下の通りになります。</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">for</span> tweet <span class="kw">in</span> timelines:
+    twitter.favorites.create(_id <span class="op">=</span> tweet[<span class="st">&#39;id&#39;</span>])</code></pre></div>
+<p>注意ですが、countで指定した数のツイート全てにいいねをつけます。なのでcountの値はちゃんと考えて指定しましょう。これで自動ファボ爆装置が完成しました。</p>
+<h2 id="最終的なソースコード">最終的なソースコード</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> twitter <span class="im">import</span> <span class="op">*</span>
+ACCESS_TOKEN <span class="op">=</span> <span class="st">&#39;YOUR ACCESS TOKEN&#39;</span>
+ACCESS_TOKEN_SECRET <span class="op">=</span> <span class="st">&#39;YOUR ACCESS TOKEN SECRET&#39;</span>
+CONSUMER_KEY <span class="op">=</span> <span class="st">&#39;YOUR CONSUMER KEY&#39;</span>
+CONSUMER_KEY_SECRET <span class="op">=</span> <span class="st">&#39;YOUR CONSUMER KEY SECRET&#39;</span>
+
+twitter <span class="op">=</span> Twitter(auth<span class="op">=</span>OAuth(ACCESS_TOKEN,ACCESS_TOKEN_SECRET,
+                             CONSUMER_KEY,CONSUMER_KEY_SECRET))
+timelines <span class="op">=</span> twitter.statuses.user_timeline(screen_name <span class="op">=</span> userID,count <span class="op">=</span> <span class="dv">200</span>)
+<span class="cf">for</span> tweet <span class="kw">in</span> timelines:    
+    twitter.favorites.create(_id <span class="op">=</span> tweet[<span class="st">&#39;id&#39;</span>])</code></pre></div>
+<h2 id="最後に">最後に</h2>
+<p>このソースコードはまだまだ改善点が多いです。userIDやcountの入力を受け付ける処理を入れたり、RTやリプライにファボをつけないなどの機能も追加できるので是非やってみてください。また、Twitter APIではこれ以外にもいろいろなことができるので、ファボ爆装置以外にも何かツールを作ってみてはいかがでしょうか。では素晴らしいファボ爆ライフを。</p>

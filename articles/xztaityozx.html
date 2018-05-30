@@ -1,0 +1,132 @@
+<h1 id="僕だってシェル芸人になりたい"><strong>僕だってシェル芸人になりたい</strong></h1>
+<p><strong>一般人はシェル芸人となれるのか</strong></p>
+<p><em>1年365日、昼夜を問わず人はターミナルに向かう。己は既に何でも知ってるように、もしくは己を試すように。そうするうちに人生の80％以上をターミナルの前で過ごす。そう、今もまさにそうなのだ。</em><br />
+<em>ならそれを極めた <strong>シェル芸人</strong> になるのだって悪くないだろ？</em></p>
+<h2 id="シェル芸とは"><strong>シェル芸とは</strong></h2>
+<blockquote>
+<p><strong>シェル芸の定義バージョン1.1</strong></p>
+<p>マウスも使わず、ソースコードも残さず、GUIツールを立ち上げる間もなく、あらゆる調査・計算・テキスト処理をCLI端末へのコマンド入力一撃で終わらすこと。あるいはそのときのコマンド入力のこと。(上田ブログ - https://b.ueda.tech/?page=01434)</p>
+</blockquote>
+<p>つまりコマンドをつないで色んな処理（主にテキスト処理）をすることがシェル芸。それをする人がシェル芸人。<br />
+「芸人」ってところが <strong>かなり</strong> バカっぽいけど…コマンドへの知識、そのオプションの把握、華麗にパイプをつないで欲しい出力を一瞬で得てしまう姿は非常にカッコイイ（はず）。</p>
+<p>僕もこれに憧れているけど、まだまだ修行中なので勉強していきたい。そういう記事<br />
+「芸」とかちょっと…みたいな控えめな人も是非覚えてみてほしい。絶対に実生活で役に立つはず。僕がそうだからね。</p>
+<p>今回シェルは <code>bash</code> を使うよ。ほかによく使われる <code>zsh</code> や <code>fish</code> はちょっと文法に違いがあるので気をつけて。 <code>zsh</code> はそんなに変わらないけどね。</p>
+<p>それでは行ってみよう。</p>
+<h2 id="コマンド出力を別のコマンドへ渡す"><strong>コマンド出力を別のコマンドへ渡す</strong></h2>
+<p>シェル芸をするならこれができないと厳しい。 <code>sed</code> だけでなんでもやるってパターンもあるけど…それは <code>sed</code> を極めた上位種のシェル芸人にしかできない。</p>
+<ul>
+<li>sedコマンドはチューリング完全
+<ul>
+<li>(http://hfuji.hatenablog.jp/entry/2017/07/31/211018)</li>
+</ul></li>
+<li>A proof that UNIX utility &quot;sed&quot; is Turing complete
+<ul>
+<li>(http://www.catonmat.net/blog/proof-that-sed-is-turing-complete/)</li>
+</ul></li>
+</ul>
+<p>コマンドAの出力をコマンドBへ渡す方法はだいたい3つ。 <strong>プロセス置換</strong> と <strong>パイプ</strong> それと <strong>リダイレクト</strong> だ。</p>
+<p>普段の生活ではせいぜいパイプとリダイレクトを使うぐらい。例えば大量にものがあるディレクトリで <code>ls -al</code> を放つ時。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">ls</span> -al <span class="kw">|</span> <span class="fu">less</span></code></pre></div>
+<p>としてログが一気に流れないようにするとか。他には同じように<code>ls -al</code>をファイルに書き出す時。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">ls</span> -al <span class="op">&gt;</span> huga.txt</code></pre></div>
+<p>みたいに書いたりする。実際これぐらいの使い方で全然困らないし、リダイレクトなんかできる時点でめっちゃ使える人だわ。</p>
+<h2 id="とと"><strong><code>||</code>と<code>&amp;&amp;</code>と<code>|&amp;</code></strong></h2>
+<h3 id="section"><code>||</code></h3>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">command1</span> <span class="kw">||</span> <span class="ex">command2</span></code></pre></div>
+<p>command1が失敗したときにcommand2が実行される。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="bu">cd</span> ~/ABC <span class="kw">||</span> <span class="fu">mkdir</span> ~/ABC</code></pre></div>
+<p>といったようにcdしたい先がない時、勝手に作ってくれるような書き方ができる。</p>
+<h3 id="section-1"><code>&amp;&amp;</code></h3>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">command1</span> <span class="kw">&amp;&amp;</span> <span class="ex">command2</span></code></pre></div>
+<p>反対にcommand1が成功したときにcommand2が実行される。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">ls</span> 黒歴史 <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> ./*</code></pre></div>
+<p>といったように黒歴史があるディレクトリの中身を消せるような書き方ができる。</p>
+<h3 id="section-2"><code>|&amp;</code></h3>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">command1</span> <span class="kw">|&amp;</span> <span class="ex">command2</span></code></pre></div>
+<p>command1のstdoutとstderrをまとめてcommand2のstdinに渡せる。<code>2&gt;&amp;1</code>を使うよりスマートに見える。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="co"># stderrを捨てる。何も表示されない。</span>
+$ <span class="fu">ls</span> a <span class="op">2&gt;</span>/dev/null <span class="kw">|</span> <span class="fu">cat</span>
+
+<span class="co"># stderrをstdoutにリダイレクトする。</span>
+$ <span class="fu">ls</span> a <span class="op">2&gt;&amp;1</span> <span class="kw">|</span> <span class="fu">cat</span>
+<span class="ex">ls</span>: cannot access <span class="st">&#39;a&#39;</span>: No such file or directory
+
+<span class="co"># |&amp;で2&gt;&amp;1の代わりをする。stderrを/dev/nullに捨ててるけどcatには渡ってることが分かる。</span>
+$ <span class="fu">ls</span> a <span class="op">2&gt;</span>/dev/null <span class="kw">|&amp;</span> <span class="fu">cat</span>
+<span class="ex">ls</span>: cannot access <span class="st">&#39;a&#39;</span>: No such file or directory</code></pre></div>
+<p>ただしこれは<code>2&gt;&amp;1</code>にいつも置き換えられるわけじゃない。こっちはパイプだからstdoutとstderrを<code>/dev/null</code>に捨てたい時なんかは使えない<br />
+代わりに<code>&amp;&gt;</code>ってやつがある。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">command1</span> <span class="op">2&gt;&amp;1</span> <span class="op">&gt;</span> /dev/null
+<span class="co"># ↑同じ意味↓</span>
+<span class="ex">command1</span> <span class="op">&amp;&gt;</span> /dev/null</code></pre></div>
+<p><code>&amp;&gt;</code>のほうが2文字も少ないのでいいんじゃないですかね。</p>
+<h2 id="とと-1"><strong><code>&gt;&gt;</code>と<code>&lt;&lt;</code>と<code>&lt;&lt;&lt;</code></strong></h2>
+<h3 id="section-3"><code>&gt;&gt;</code></h3>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">command1</span> <span class="op">&gt;&gt;</span> hoge.txt</code></pre></div>
+<p>command1のstdoutをhoge.txtに <strong>追記</strong> する。書き足していきたいときはこうするがいい。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="bu">echo</span> <span class="st">&#39;export FZF_DEFAULT_OPTS=&quot;--cycle --reverse -1 -0 --height=40% --ansi&quot;&#39;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</code></pre></div>
+<p>僕は新しい環境の整備とかする時は上みたいに設定を<code>~/.bashrc</code>に書き込むときとか多用する。まあ<code>.bashrc</code>をGitHubとかで管理すればいいんだけどね？</p>
+<h3 id="section-4"><code>&lt;&lt;</code></h3>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="bu">command</span> <span class="op">&lt;&lt; EOF</span>
+...
+...
+...
+EOF</code></pre></div>
+<p>command1のstdinに改行込みで任意の文字列を書き込める。終わるときは<code>&lt;&lt;</code>の横に書いた文字列を書くと終わる。この文字列は任意なので<code>A</code>とかでもいい。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">cat</span> <span class="op">&lt;&lt; EOF</span> <span class="op">&gt;&gt;</span> <span class="ex">hoge.txt</span>
+abc
+edf
+edf?
+EOF</code></pre></div>
+<p>いい例が思いつかないけどコマンドやファイルに複数行の文字列を渡したいときに使える。</p>
+<h3 id="section-5"><code>&lt;&lt;&lt;</code></h3>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">command1</span> <span class="op">&lt;&lt;&lt;</span> string</code></pre></div>
+<p>たま～に使う。<code>&lt;</code>とほぼ同じだけど。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="bu">echo</span> <span class="st">&quot;abc edf&quot;</span> <span class="kw">|</span> <span class="bu">read</span> <span class="va">x</span> <span class="va">y</span></code></pre></div>
+<p>ということをしたいとき。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="bu">read</span> <span class="va">x</span> <span class="va">y</span> <span class="op">&lt;&lt;&lt;</span> <span class="st">&quot;abc edf&quot;</span></code></pre></div>
+<p>に書き換えられる。いまざっと思い返してみたけど使ったことがない。</p>
+<h2 id="と"><strong><code>$()</code>と<code>&lt;()</code></strong></h2>
+<p>プロセス置換の類。</p>
+<h3 id="section-6"><code>$()</code></h3>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">command2</span> <span class="va">$(</span><span class="ex">command1</span><span class="va">)</span>
+<span class="co"># ``でもOK</span>
+<span class="ex">command2</span> <span class="kw">`</span><span class="ex">command1</span><span class="kw">`</span></code></pre></div>
+<p>command1の結果をcommand2の引数として使いたいときに使う。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">gcc</span> <span class="va">$(</span><span class="fu">ls</span> -t1 *.c <span class="kw">|</span><span class="fu">head</span> -n1<span class="va">)</span></code></pre></div>
+<p>タイムスタンプが一番新しい<code>.c</code>ファイルを<code>gcc</code>に放り込むときとかに便利。どうせC演習とかで <strong>↑キー!↑キー!エンター!</strong> とかしてたんだろ!? やめちまえ!!</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">cc</span> <span class="va">$(</span><span class="fu">ls</span> -t1 *.c <span class="kw">|</span> <span class="fu">head</span> -n1<span class="va">)</span> <span class="kw">&amp;&amp;</span> <span class="ex">./a.out</span></code></pre></div>
+<p>演習とかでは最後に書いたコードを試したいのでこう書けば↑エンターってキーストロークでできる。</p>
+<h3 id="section-7"><code>&lt;()</code></h3>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">command1</span> <span class="op">&lt;(</span><span class="ex">command2</span><span class="op">)</span></code></pre></div>
+<p><code>$()</code>をリダイレクトするようにした版みたいなやつ。<code>command2 | command1</code>と動きは同じ。パフォーマンスは違う。ちなみに何個でも書ける。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">cat</span> <span class="op">&lt;(</span><span class="bu">echo</span> <span class="va">$PATH</span><span class="op">)</span> <span class="op">&lt;(</span><span class="fu">ls</span> -l<span class="op">)</span></code></pre></div>
+<p>この例はいったい何がしたいんだ…って感じだけどこういうこともできる。</p>
+<p>ここまででチュートリアルが終わりだぞ。</p>
+<h2 id="catコマンド"><code>cat</code>コマンド</h2>
+<p>これまでの説明でもよくでる<code>cat</code>コマンド。シンプルだしシェル芸を開始するときにワンライナーの先頭によくありがち。</p>
+<p>シンプルな<code>cat</code>コマンドだけど、結構オプションがある<br />
+例えば<code>-n</code>を付けると行数ともに出力してくれたり、<code>-E</code>を付けると改行位置を表示してくれたりする。</p>
+<p>他のオプションは<code>man cat</code>で確かめてほしいけど、<code>-n</code>とか<code>-E</code>があるとシェル芸的にどんな嬉しいことがあるの？ という話。</p>
+<p>2つのファイル<code>f1.txt</code>と<code>f2.txt</code>がそれぞれこんな感じとする。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">cat</span> f1.txt
+<span class="ex">abc</span>
+<span class="ex">edf</span>
+<span class="ex">cg</span>
+$ <span class="fu">cat</span> f2.txt
+<span class="ex">123</span>
+<span class="ex">456</span>
+<span class="ex">789</span></code></pre></div>
+<p>f1の1行目が<code>abc</code>という商品でf2の1行目がその値段だったとき…？ こうやって縦に表示されると見づらい。</p>
+<p>こういうときは<code>join</code>と<code>cat -n</code>を使う。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">$ <span class="fu">join</span> <span class="op">&lt;(</span><span class="fu">cat</span> -n f1.txt<span class="op">)</span> <span class="op">&lt;(</span><span class="fu">cat</span> -n f2.txt<span class="op">)</span> 
+<span class="ex">1</span> abc 123
+<span class="ex">2</span> edf 456
+<span class="ex">3</span> cg 789</code></pre></div>
+<p>行数をキーにjoinするので綺麗に並べることができた。やったねぇ。</p>
+<p>でも実際こういうのをしたいなら<code>paste</code>コマンドでいい。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">paste</span> f1.txt f2.txt</code></pre></div>
+<h2 id="続け"><strong>続け</strong></h2>
+<p>実はここぐらいまでであなたは下級シェル芸人ぐらいにはなっています。というのもシェル芸って結局↑のことの組み合わせで解決できる場合が多いからです。</p>
+<p>もちろん<code>sed</code>や<code>grep</code>,<code>awk</code>といった三種の神器や<code>xargs</code>,<code>eval</code>みたいなのが使えればさらに効率よく欲しい出力を得られるんですが、これ全部説明するのは量が多すぎるし1回の記事で書く気力もないので部誌が続くならまあ…書くんじゃないかな。</p>

@@ -1,0 +1,95 @@
+<h1 id="自己紹介">自己紹介</h1>
+<p>2014年度入学のISのodanです． 学生時代は研究で自然言語処理，趣味でweb開発と競プロをやっていました． サークル類はHxSとOIT-CPT(競技プログラミングチーム)に入っていました． あと学部首席でした．</p>
+<h1 id="tldr">TL;DR</h1>
+<ul>
+<li>大学の部活で部誌を作りたいという声が挙がったので執筆環境を構築した</li>
+<li>Markdownで書いてPandocでtexファイルを生成，latexでpdf化した</li>
+<li>texlintで文章を自動校正する仕組みを導入した</li>
+<li>開発環境はDocker上に構築した</li>
+<li>Circle CIと連携することでコミットのたびに部誌pdfが生成されるようにした</li>
+</ul>
+<h1 id="pandocの設定">Pandocの設定</h1>
+<p>Pandocの説明は<a href="http://sky-y.github.io/site-pandoc-jp/users-guide/">公式サイト</a>に 次にように書かれています．</p>
+<blockquote>
+<p>Pandocは Haskell で書かれたライブラリおよびコマンドラインツールであり、 あるマークアップ形式で書かれた文書を別の形式へ変換するものです。</p>
+</blockquote>
+<p>例えば，Pandocを使うことで，Markdownで書かれた文章をdocx形式に変換できます．</p>
+<p>部誌を執筆するにはいくつかの方法がありますが最終的には，Markdownで記事を書き，Pandocでtexファイルに変換し，最終的にlatexでpdfを生成する方針に決定しました． まず，他に検討した方針の採用に至らなかった理由を書いていきます． 次に採用した方針のメリットについて紹介します．</p>
+<h2 id="latexで書きpdfを生成">latexで書きpdfを生成</h2>
+<p>まず真っ先に思いつく方針がこれです． 実際に「サークル 部誌」で検索するとこの方針を採用したという記事がヒットします． しかし，この方針は次の2つの理由により不採用となりました．</p>
+<ol style="list-style-type: decimal">
+<li>latexの環境構築および習得の難しさ</li>
+<li>後述するtextlintという自動校正ツールのサポートを受けられない</li>
+</ol>
+<h2 id="markdownで書きpandocで直接pdfを生成">Markdownで書き，Pandocで直接pdfを生成</h2>
+<p>Pandocというツールを知っていたため，次に思いついた方針がこれでした． Pandocでpdfを生成する時は，内部で一度texファイルに変換された後， <code>xelatex</code> か <code>lualatex</code> によってpdf化されます． latexエンジンは僕が普段使っている <code>pLaTeX</code> とは違うため， <code>jsbook</code> などのドキュメントクラスを使えず，設定方法も独特なものでした． これではエラーに出会った時，解決できない可能性があり，この方針は見送りました．</p>
+<h2 id="markdownで書きpandocでtexファイルを生成しplatexでpdf化">Markdownで書き，Pandocでtexファイルを生成し，pLaTeXでpdf化</h2>
+<p>最終的にこの方針に決定しました． この方針ではMarkdownで書くため，textlintを使うことで文章の自動校正が可能になります． また，一度texファイルにすることで，レイアウトの調整などはlatexのレイヤーで行うことができます．これにより柔軟な調整が可能になります．</p>
+<h1 id="textlintの設定">textlintの設定</h1>
+<p>Lintツールとは，ソースコードに対して静的解析を行うツールです． これにより，変数の初期化忘れなどのバグや， カッコ周辺の空白の挿入し忘れなどのコーディングスタイルに従っていない箇所を検出できます． <a href="http://efcl.info/2014/12/30/textlint/">textlint</a>はMarkdownで書かれたテキスト向けのLintツールです． textlintはECMAScript(JavaScript)のLintツールのESLintの影響を強く受けており， textlintはESLintと同様に，文章に関する様々なルールを使用できます． textlintについて何も詳しくなかったため，<a href="https://github.com/EzoeRyou/cpp17book">江添亮氏のC++17 Book</a>のものをベースに設定ファイルを書きました． 以下が設定の全体です． 技術的な文章を書くのに必要な最低限のルールが揃っています．</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;rules&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+        <span class="dt">&quot;preset-ja-technical-writing&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+            <span class="dt">&quot;no-exclamation-question-mark&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span>
+            <span class="dt">&quot;sentence-length&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+                <span class="dt">&quot;max&quot;</span> <span class="fu">:</span> <span class="dv">500</span>
+            <span class="fu">},</span>
+            <span class="dt">&quot;ja-no-mixed-period&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+                <span class="dt">&quot;periodMark&quot;</span><span class="fu">:</span> <span class="st">&quot;。&quot;</span><span class="fu">,</span>
+                <span class="dt">&quot;allowPeriodMarks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;．&quot;</span><span class="ot">]</span>
+            <span class="fu">},</span>
+            <span class="dt">&quot;no-doubled-joshi&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+                <span class="dt">&quot;separatorChars&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;。&quot;</span><span class="ot">,</span><span class="st">&quot;?&quot;</span><span class="ot">,</span><span class="st">&quot;!&quot;</span><span class="ot">,</span><span class="st">&quot;？&quot;</span><span class="ot">,</span><span class="st">&quot;！&quot;</span><span class="ot">,</span><span class="st">&quot;．&quot;</span><span class="ot">]</span>
+            <span class="fu">},</span>
+            <span class="dt">&quot;no-doubled-conjunctive-particle-ga&quot;</span><span class="fu">:</span> <span class="kw">false</span>
+        <span class="fu">},</span>
+        <span class="dt">&quot;spellcheck-tech-word&quot;</span><span class="fu">:</span> <span class="kw">true</span>
+    <span class="fu">},</span>
+    <span class="dt">&quot;filters&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+        <span class="dt">&quot;comments&quot;</span><span class="fu">:</span> <span class="kw">true</span>
+    <span class="fu">}</span>
+<span class="fu">}</span></code></pre></div>
+<h1 id="dockerの設定">Dockerの設定</h1>
+<p>Dockerはコンテナ型の仮想化を行うオープンソフトウェアです． <code>Dockerfile</code> という設定ファイルを使うことで，異なる端末でほぼ同一の開発環境を用意できます．</p>
+<h2 id="執筆環境構築の難しさ">執筆環境構築の難しさ</h2>
+<p>部誌の執筆環境には大きく分けて，<code>textlint</code>,<code>pandoc</code>,<code>latex</code>の3つの開発環境を用意する必要があります． このうち，latexの開発環境にはtexliveというパッケージをインストールする必要がありますが，ローカルに導入する難易度が高く，導入できたとしても環境が壊れやすいという特性があります． またPandocは，引用の表示のために<code>pandoc-citeproc</code>，図表番号の相互参照のために<code>pandoc-crossref</code>というfilterを導入する必要がありました． Pandoc及びこれらのfilterは，Haskell製のソフトウェアですが，Haskellのパッケージ間の依存関係の闇は深く，Stackと呼ばれるパッケージマネージャを用いても，環境構築が難しいものでした．</p>
+<p>上述したとおり，執筆環境を部員それぞれのローカルに構築して貰うのは，非常に難しいと判断したため，Dockerコンテナ上に環境を構築することにしました． これにより，Dockerさえインストールすれば，各自のPCで部誌を生成することが可能になります．</p>
+<h2 id="dockerのuidとgidのマッピング問題">Dockerのuidとgidのマッピング問題</h2>
+<p>Dockerコンテナ内で部誌pdfを生成することになりましたが，これによりDockerのuidとgidのマッピング問題が生じます． これは，Dockerコンテナ内のuid,gidがホストマシンのuid,gidと異なるために，パーミッションの設定によっては，コンテナで生成されたファイルをホストマシンで自由に扱えないという問題です． <a href="https://github.com/jupyter/docker-stacks">jupyter/docker-stacks</a>では，コンテナ起動時にホストマシンのuidとgidを指定することで，コンテナ内のユーザのuidとgidをそれに設定するシェルスクリプトを書き，それをDockerのENTRYPOINTに指定しています． この仕組みを真似することで，マッピング問題を回避することにしました．</p>
+<h1 id="circle-ciの設定">Circle CIの設定</h1>
+<p>Circle CIとは，継続的インテグレーション(Continuous Integration;CI)のSaaSです． このサービスをGitHubと連携することで，コミットのたびに様々な処理を走らせることができます． CIのSaaSで有名なものにTravis CIがありますが，Circle CIはDockerのサポートが手厚いため，こちらのサービスを使用することに決めました．</p>
+<h2 id="部誌pdf生成の自動化">部誌pdf生成の自動化</h2>
+<p>Circle CIの設定を行うことでコミットのたびに次の処理が走るようになりました．</p>
+<ol style="list-style-type: decimal">
+<li>textlintを用いた文章の自動校正</li>
+<li>Pandocを用いてMarkdownで書かれた文章をtexファイルに変換</li>
+<li>texファイルからpLaTeXを用いてpdf生成</li>
+</ol>
+<p>また，<code>.circleci/config.yml</code>に <code>store_artifacts</code> の設定を書くことで，生成されたpdfをCircle CIのページから確認できるようにしました．</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="kw">-</span> <span class="fu">store_artifacts:</span>
+    <span class="fu">path:</span><span class="at"> ~/work/main.pdf</span></code></pre></div>
+<h2 id="dockerイメージのキャッシュ">Dockerイメージのキャッシュ</h2>
+<p>Circle CI上での部誌生成もDockerコンテナ内で実行されます． この時，何も設定をしないとコミットのたびに，Dockerfileを変更していないにも関わらず，毎回コンテナのbuildが走ることになります． これは時間の無駄です． 特にPandocコンテナのbuildには30分ほど時間がかかります． そこで，Circle CIのcache機能を用いて，Dockerイメージをキャッシュするようにしました． 次のような設定を書けばDockerイメージのキャッシュが可能になります．</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="kw">-</span> <span class="fu">restore_cache:</span>
+    <span class="fu">key:</span><span class="at"> docker-base-{{ checksum &quot;Dockerfile.base&quot; }}</span>
+    <span class="fu">path:</span><span class="at"> ~/cache/base-image.tar</span>
+<span class="kw">-</span> <span class="fu">run:</span>
+    <span class="fu">command:</span><span class="at"> |</span>
+        if <span class="kw">[</span> -f ~/cache/base-image.tar <span class="kw">]</span>; then
+            docker load -i ~/cache/base-image.tar
+        else
+            docker-compose build base
+        fi
+
+<span class="kw">-</span> <span class="fu">save_cache:</span>
+    <span class="fu">key:</span><span class="at"> docker-base-{{ checksum &quot;Dockerfile.base&quot; }}</span>
+    <span class="fu">paths:</span><span class="at"> ~/cache/base-image.tar</span></code></pre></div>
+<p>次の3つのことを順番に行っています．</p>
+<ol style="list-style-type: decimal">
+<li><code>restore_cache</code>: Dockerfileのハッシュ値をkeyにDockerイメージのファイルのキャッシュを読み込む</li>
+<li>真ん中の<code>run</code>: キャッシュファイルが存在するならそれを読み込み，しないならDocker buildを実行</li>
+<li><code>save_cache</code>: Dockerfileのハッシュ値をkeyにDockerイメージのファイルのキャッシュを作成</li>
+</ol>
+<p>Dockerfileのハッシュ値をkeyの一部に含めることで，Dockerfileの変更を検知できます．</p>
+<h1 id="まとめ">まとめ</h1>
+<p>この章では，MarkdownでHxSの部誌を生成するための環境設定について解説しました． 部誌は<code>Pandoc</code>を使ってMarkdownを中間表現としてtexファイルに変換し，そのtexファイルを<code>pLaTeX</code>でpdfに変換しました． Markdownに対してtexlintを使うことで文章を自動校正し，人の手助けをする仕組みを導入しました． 開発環境は<code>Docker</code>を使って用意することで，環境のポータビリティを確保しました． また，コミットのたびに部誌がCircle CI上で自動ビルドされるようにしました．</p>
